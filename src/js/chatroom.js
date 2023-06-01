@@ -11,6 +11,7 @@ const socio = {
 $(document).ready(function() {
     connect();
   });
+document.getElementById("btnCerrarSesion").addEventListener("click", cerrarSesion);
 document.getElementById("btnEnviarPublico").addEventListener("click", sendPublicMessage);
 document.getElementById("btnEnviarPrivado").addEventListener("click", sendPrivMessage);
 
@@ -40,27 +41,23 @@ function onConnected() {
 function sendPublicMessage(){
     var mensaje = {
         'id': 'id-' + new Date().getTime(),
-        'texto': $("#mensaje").val(),
+        'texto': document.getElementById('mensaje').value,
         'socio': socio
     }
-
     stompClient.send("/app/mensaje-publico", {}, JSON.stringify(mensaje));
-
 }
 
 function sendPrivMessage(){
     const socioReceptor = {
-        'email': document.querySelector('#listado-emails').value
+        'email': document.getElementById('listado-emails').value
     };
     var mensaje = {
         'id': 'id-' + new Date().getTime(),
-        'texto': $("#privMensaje").val(),
+        'texto': document.getElementById('privMensaje').value,
         'socio': socio,
         'receptor': socioReceptor
     }
-
     stompClient.send("/app/mensaje-privado", {}, JSON.stringify(mensaje));
-
 }
 
 function mostrarMensajePublico(mensaje){
@@ -75,4 +72,9 @@ function mostrarHistorial(listaMensajes){
     listaMensajes.forEach(mensaje => {
         textArea.innerHTML += '<div class="alert alert-info mx-3" role="alert"><h6>'+ mensaje.socio.nombre + ' ' +  mensaje.socio.apellido +'</h6>'+ mensaje.texto +'<small class="float-right">'+ mensaje.fecha.replace('T', ' ').substring(0,19) +'</small></div>'
     });
+}
+
+function cerrarSesion(){
+    stompClient.disconnect();
+    window.location.href = "login.html";
 }

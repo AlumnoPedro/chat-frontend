@@ -130,7 +130,8 @@ var socio = {
 $(document).ready(function () {
   connect();
 });
-document.getElementById("btnEnviarPublico").addEventListener("click", sendMessage);
+document.getElementById("btnCerrarSesion").addEventListener("click", cerrarSesion);
+document.getElementById("btnEnviarPublico").addEventListener("click", sendPublicMessage);
 document.getElementById("btnEnviarPrivado").addEventListener("click", sendPrivMessage);
 function connect() {
   var socket = new SockJS('http://localhost:8080/chat-websocket');
@@ -138,8 +139,8 @@ function connect() {
   stompClient.connect({}, onConnected);
 }
 function onConnected() {
-  stompClient.subscribe('/chat/public', function (mensaje) {
-    mostrarMensaje(JSON.parse(mensaje.body));
+  stompClient.subscribe('/chat/publico', function (mensaje) {
+    mostrarMensajePublico(JSON.parse(mensaje.body));
   });
   stompClient.send("/app/historial", {}, localStorage.email);
   stompClient.subscribe('/chat/historial/' + localStorage.email, function (listaMensajes) {
@@ -150,13 +151,13 @@ function onConnected() {
     mostrarMensajePrivado(JSON.parse(mensaje.body));
   });
 }
-function sendMessage() {
+function sendPublicMessage() {
   var mensaje = {
     'id': 'id-' + new Date().getTime(),
     'texto': $("#mensaje").val(),
     'socio': socio
   };
-  stompClient.send("/app/mensaje", {}, JSON.stringify(mensaje));
+  stompClient.send("/app/mensaje-publico", {}, JSON.stringify(mensaje));
 }
 function sendPrivMessage() {
   var socioReceptor = {
@@ -170,7 +171,7 @@ function sendPrivMessage() {
   };
   stompClient.send("/app/mensaje-privado", {}, JSON.stringify(mensaje));
 }
-function mostrarMensaje(mensaje) {
+function mostrarMensajePublico(mensaje) {
   textArea.innerHTML += '<div class="alert alert-info mx-3" role="alert"><h6>' + mensaje.socio.nombre + ' ' + mensaje.socio.apellido + '</h6>' + mensaje.texto + '<small class="float-right">' + mensaje.fecha.replace('T', ' ').substring(0, 19) + '</small></div>';
 }
 function mostrarMensajePrivado(mensaje) {
@@ -180,6 +181,10 @@ function mostrarHistorial(listaMensajes) {
   listaMensajes.forEach(function (mensaje) {
     textArea.innerHTML += '<div class="alert alert-info mx-3" role="alert"><h6>' + mensaje.socio.nombre + ' ' + mensaje.socio.apellido + '</h6>' + mensaje.texto + '<small class="float-right">' + mensaje.fecha.replace('T', ' ').substring(0, 19) + '</small></div>';
   });
+}
+function cerrarSesion() {
+  stompClient.disconnect();
+  window.location.href = "login.html";
 }
 },{}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
@@ -206,7 +211,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54598" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52070" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

@@ -154,18 +154,18 @@ function onConnected() {
 function sendPublicMessage() {
   var mensaje = {
     'id': 'id-' + new Date().getTime(),
-    'texto': $("#mensaje").val(),
+    'texto': document.getElementById('mensaje').value,
     'socio': socio
   };
   stompClient.send("/app/mensaje-publico", {}, JSON.stringify(mensaje));
 }
 function sendPrivMessage() {
   var socioReceptor = {
-    'email': document.querySelector('#listado-emails').value
+    'email': document.getElementById('listado-emails').value
   };
   var mensaje = {
     'id': 'id-' + new Date().getTime(),
-    'texto': $("#privMensaje").val(),
+    'texto': document.getElementById('privMensaje').value,
     'socio': socio,
     'receptor': socioReceptor
   };
@@ -211,7 +211,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52070" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61766" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

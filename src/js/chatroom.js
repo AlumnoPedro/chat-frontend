@@ -76,5 +76,6 @@ function mostrarHistorial(listaMensajes){
 
 function cerrarSesion(){
     stompClient.disconnect();
+    localStorage.clear();
     window.location.href = "login.html";
 }

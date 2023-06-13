@@ -184,6 +184,7 @@ function mostrarHistorial(listaMensajes) {
 }
 function cerrarSesion() {
   stompClient.disconnect();
+  localStorage.clear();
   window.location.href = "login.html";
 }
 },{}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
@@ -211,7 +212,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51268" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53031" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
